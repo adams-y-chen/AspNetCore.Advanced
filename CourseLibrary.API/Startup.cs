@@ -93,6 +93,7 @@ namespace CourseLibrary.API
 
             // register PropertyMappingService
             services.AddTransient<IPropertyMappingService, PropertyMappingService>();
+            services.AddTransient<IPropertyCheckerService, PropertyCheckerService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
