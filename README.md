@@ -10,6 +10,8 @@ The repo contains code that demostrates:
 4. Support HTTP caching.
 5. Support concurrency.
 
+Tips on caching:
+Don't implementation cache store in your app. Just implement Etags and validation model in the app. Set the cache header correctly so the external cache server can cache correctly. CDN services are often preferred as an alternative for setting up your owner caching servers.
 
 Other repos:
 https://github.com/KevinDockx/BuildingRESTfulAPIAspNetCore3
