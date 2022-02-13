@@ -27,6 +27,19 @@ namespace CourseLibrary.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Etag headers
+            services.AddHttpCacheHeaders(
+                expirationModelOptionsAction =>
+                {
+                    expirationModelOptionsAction.MaxAge = 60;
+                    expirationModelOptionsAction.CacheLocation = Marvin.Cache.Headers.CacheLocation.Private;
+                },
+                validationModelOptionsAction =>
+                {
+                    validationModelOptionsAction.MustRevalidate = true;
+                });
+
+            // Response Cache-Control header
             services.AddResponseCaching();
 
             services.AddControllers(setupAction =>
@@ -136,7 +149,10 @@ namespace CourseLibrary.API
 
             // Response caching shall be add as the first middleware in the request pipeline.
             // The cached response is returned instead of routing the request to the MVC logic.
-            app.UseResponseCaching();
+           // app.UseResponseCaching();
+
+            // Added after Caching middleware but before routing and MVC.
+            app.UseHttpCacheHeaders();
 
             app.UseRouting();
 
