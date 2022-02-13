@@ -27,9 +27,17 @@ namespace CourseLibrary.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCaching();
+
             services.AddControllers(setupAction =>
             {
                 setupAction.ReturnHttpNotAcceptable = true;
+                // Define a cache profile which can be apply to resource controllers.
+                setupAction.CacheProfiles.Add("240SecondsCacheProfile",
+                    new CacheProfile()
+                    {
+                        Duration = 240
+                    });
 
             }).AddNewtonsoftJson(setupAction =>
              {
@@ -125,6 +133,10 @@ namespace CourseLibrary.API
                 });
 
             }
+
+            // Response caching shall be add as the first middleware in the request pipeline.
+            // The cached response is returned instead of routing the request to the MVC logic.
+            app.UseResponseCaching();
 
             app.UseRouting();
 
